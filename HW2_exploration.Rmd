@@ -16,13 +16,12 @@ library(ggplot2)
 # create a connection to the database
 soccer_dataset <- dbConnect(RSQLite::SQLite(), "data/soccer_data/database.sqlite")
 
-# list all tables
+# list all tables in the database
 dbListTables(soccer_dataset)
 ```
 
 ```{r}
 #create dataframe for each of this different tables from this database
-
 Country <- dbGetQuery(soccer_dataset, "SELECT * FROM Country")
 League  <- dbGetQuery(soccer_dataset, "SELECT * FROM League")
 Match   <- dbGetQuery(soccer_dataset, "SELECT * FROM Match") 
@@ -30,6 +29,7 @@ Player  <- dbGetQuery(soccer_dataset, "SELECT * FROM Player")
 Player_Attributes <- dbGetQuery(soccer_dataset, "SELECT * FROM Player_Attributes")
 Team <- dbGetQuery(soccer_dataset, "SELECT * FROM Team")
 Team_Attributes <- dbGetQuery(soccer_dataset, "SELECT * FROM Team_Attributes")
+
 ```
 
 ```{r}
@@ -112,7 +112,7 @@ ggplot(excellent_shot_power, aes(y = player_name, x = shot_power)) +
 
 ```
 
-## does these top 20 players with excellent shot power has good, bad or the ugly overall ratings ?
+## Is there any association between shot power and overall ratings ?
 ```{r, warning=FALSE}
 # read the player_player_attributes dataset, craete scatterplot and plot size based on overall rating
 ggplot(player_player_attributes, aes(x = shot_power, y = overall_rating)) +
@@ -127,6 +127,10 @@ ggplot(player_player_attributes, aes(x = shot_power, y = overall_rating)) +
 
 ```
 
+## Answers
+1. The dataset is really huge, and it contains every minor details for each of the players that played league. This data can be excellent for predictive Machine learning models,considering such a fine grained data. This is already a cleaned version of data, which I did not like much. Each tables are supposed to be joined with primary id from another table, for one sets of table I am not finding the primary and foreign keys. Nonetheless, I plotted distribution and trend for some variables, and I can observe patterns in the data. for example, there is clear positive association between powerful shot and overall rating. 
 
+2. I proposed a question trying to see if younger players scores goals more than elder players. But, I am little worried about how am i going to classify the players, also i didn't find the number of goals scored per player. Instead of looking at the goals, I am thinking of looking at agility of player, which might help me classify players.  I have not yet stride to that part, i was more curious about which soccer player has the most powerful shot. To move towards my questions, I need to calculate age for players, classify them, and look at their overall ratings. Also, I need to drop the list of players because I don't want to do the analysis for every single players. I will summarize the data, or I am considering club wise grouping would be suitable. Then chose a suitable plot. I don't have clear idea what plot I will use, I will probably go explore new chart types in google.
 
+3. I think chosing right plot is going to be difficult in my case. Data wrangling part is a bit mess too, cause I need to find primary and foreign key for all tables so that I can join those two tables but i have not found for one. I also see a challenge in selecting variables, because there are several variables that defines younger and elder player. Being able to correctly select them is going to be a huge challenge. for example: younger player are supposed to have higher agility, but i don't think that would be the case in regards to trained players. Also what age is a younger player, is it 24, 25 or ? I might  have to rephrase my research questions.
 
