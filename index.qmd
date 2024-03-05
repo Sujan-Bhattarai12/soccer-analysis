@@ -1,6 +1,6 @@
 ---
 # ~ additional YAML options omitted for brevity ~
-title: "European Socer players attributes comparison, classified based on FIFA ratings"
+title: "European socer players attributes comparison, classified based on FIFA ratings"
 author: "Sujan Bhattarai"
 date: "2024-03-01"
 format:
