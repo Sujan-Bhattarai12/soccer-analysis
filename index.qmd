@@ -1,5 +1,5 @@
 ---
-title: "data_collection"
+title: ""
 author: "Sujan Bhattarai"
 date: "2024-03-09"
 output: html_document
@@ -10,41 +10,13 @@ output: html_document
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
+#### Introduction about the project
 
-### Restating Question
-My question compared to what I proposed earlier has changed since I could not find number of goals scored by players in the dataset. I will be comparing the attributes of players based on their fifa overall ratings.  The overall ratings for all players is provided in the dataset, which is used to categorzie players as Advanced, Intermediate and Novice players. Players greater than 85 overall ratings
-is defineds as advanced, players with ratings between 70 and 85 are intermediate, and players with ratings less than 70 are novice.
+This project aims to create infographics comparing attributes of soccer players, sourced from a European soccer database available on Kaggle. The database contains data on over 10,000 players. Using R exclusively, the visualization focuses on attributes such as shooting, finishing, strength, age, etc. All tasks, from fetching the data to adding text and aligning elements, are performed using R packages. Special credit is given to the UFO alien template, accessible at [UFO link](https://github.com/doehm/tidytues/blob/main/scripts/2023/week-25-ufo/ufo.png)
 
-The overarching question is:
--  How player attributes differs among players within the categories ?
+<p>Important Note:</p>
 
-Subquestions are:
-1. Is there a difference in median age between advanced, intermediate, and novice players?
-2. How does the mean of common attributes like passing, volley, speed, etc differs among these (advanced, intermediate and novice) players ?
-3. where does these clusters players stand in terms of combined attributes of dribbling, finishing and strength, which is one of the key attributes for scoring goals in soccer?
-
-
-### which variables to use in the analysis ? 
-- I will be using overall rating columns  to classify playes as Advanced, Intermediate and novice players. This will help in comparing players attributes: crossing, finishing, dribbling, agility, aggression, balance, strength.
-There is no gold standard to say that players with ratings above 80 are advanced. For
-the sake of comparison and just as of personal preference, I set that category. When categorizing players that way, there are more than 4000 and 6000 players in intermediate and novice category respectively, but only around 350 in advanced category. So, I randomly sampled 1000 from both intermediate and novice and included everything from advaned category.
-
-
-I have selected birthdate column from the dataset and becuase the soccer season was untill 2016, i used 2016 as base year to calculate the age of the players. So, when I say median age of players, it is the median age of players in 2016. This information will be included in infographics to avoid misinformation.
-
-### Handwritten infographic template
-
-```{r, fig.width= 0.5, fig.height=0.5}
-knitr::include_graphics("data/template.jpg")
-```
-
-
-### Resource i have used
-#insert link here
-- [radar chart](https://www.r-graph-gallery.com/272-ternary-plot-with-ggplot2.html)
-- [ternary_plots](http://duelingdata.blogspot.com/2017/04/nfl-combine-triangleternary-plot.html)
-
-
+<p>The ggplot package version used in this project is 3.4.4, and ggtern version 3.0.0 is utilized. It's crucial to consider that modern versions of ggplot might conflict when used in combination with other packages employed here.</p>
 
 ```{r, warning=FALSE, message=FALSE}
 #| echo: FALSE
@@ -69,7 +41,14 @@ library(magick)
 library(readr)
 library(scales)
 library(jpeg)
+library(png)
+```
 
+#### Data Wrangling
+
+The datasets available on Kaggle are stored in SQLite and require joins to build a complete dataset. However, for this project, data from a single table is sufficient. Nevertheless, for future use, datasets will be combined if necessary.
+
+```{r, warning=FALSE, message=FALSE}
 # create a connection to the database
 soccer_dataset <- dbConnect(RSQLite::SQLite(), "data/soccer_data/database.sqlite")
 
@@ -91,10 +70,9 @@ player_attr <- player_attr %>% distinct(player_api_id, .keep_all = TRUE)
 
 ```
 
+The dataset includes a column named "overall ratings," representing the FIFA average rating from 2008 to 2016. This column will be utilized to categorize players into Advanced, Intermediate, and Novice. It's important to note that the term "Novice" is used for classification purposes and does not undermine any players; it's simply a classification based on personal preference.
 
 ```{r}
-#| echo: true
-#---this information is not from a source and based on personal preference
 #---classify the players based on their overall rating
 player_attr <- player_attr %>% 
   mutate(player_class = ifelse(overall_rating >= 85, "Advanced", 
@@ -102,7 +80,8 @@ player_attr <- player_attr %>%
 
 ```
 
-My required variables of interests are:
+The project will compare the following attributes of players. The hypothesis is whether there exists a difference in attributes between the world's renowned top performers and players who do not enjoy the same level of popularity.
+
 ```{r}
 # filter required columns from the dataset
 player_data <- player_attr %>% 
@@ -110,6 +89,8 @@ player_data <- player_attr %>%
                dribbling, finishing, aggression, balance, strength, stamina)
 
 ```
+
+From the database containing over 10,000 players, only a subset is required. A random sample of 1000 players will be drawn from the intermediate and novice categories, while all players from the advanced category will be included, given that there are already fewer than 1000 advanced category players.
 
 ```{r}
 #---filter only good players from the player_data datase
@@ -131,7 +112,8 @@ clean_player_data <- bind_rows(good_players, average_bad_players, van_dijk)
 
 ```
 
-### comparison of common attributes among players categories
+#### PLot1: Radar plot for common attributes comparison
+
 ```{r,  fig.width= 0.5, fig.height=0.5}
 #summarize the data and plot the summary output with radar chart
 radar_data <- clean_player_data %>% 
@@ -150,22 +132,23 @@ radar_plot <- ggradar::ggradar(radar_data,
         grid.min = 0,
         grid.max =  100,
         grid.mid = 50,
-        axis.label.size = 16,
-        label.centre.y = F,
-        group.line.width = 1.2,
+        axis.label.size = 22,
+        label.centre.y = FALSE,
+        group.line.width = 1,
         gridline.mid.colour = "#27593d",
-        group.point.size  = 4,
-        grid.label.size = 16,
+        group.point.size  = 2,
+        grid.label.size = 20,
         group.colours = c("#7f58AF", "#64C5EB", "#E84D8A"),
         background.circle.colour = "white",
         legend.title  = "Players proficiency",
-        legend.text.size = 24) +
+        legend.text.size = 24,
+        font.radar = "serif") +
   
   #make the background theme white
   theme_void() +
   #remove y axis label
   theme(axis.text.y = element_blank())+
-  #revmoe x axis label
+  #remove x axis label
   theme(axis.text.x = element_blank())+
   #remove all grid lines 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
@@ -176,9 +159,14 @@ radar_plot <- ggradar::ggradar(radar_data,
 ggsave(plot = radar_plot, filename = "image/radar_plot.png", height = 6, width = 6, scale = 1.1, dpi= 300)
 
 #Include the radar plot in the rmd
-knitr::include_graphics("image/radar_plot.png")
+#knitr::include_graphics("image/radar_plot.png")
+knitr::include_graphics("static_image/radar.png")
+
 
 ```
+
+#### Plot2: Stat-halfye plot for age distribution
+
 ```{r}
 library(ggdist)
 ##eye plot
@@ -206,23 +194,23 @@ eye_plot <- ggplot(data, aes(x = age, y = player_class,  fill = player_class))+
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   scale_fill_manual(values = colors) +
+  theme(axis.text.x = element_blank()) +
   coord_flip() +
   xlab("") +
   ylab("")+
   theme(panel.background = element_blank())
-
+  
 #save as ggplot
 ggplot2::ggsave(plot = eye_plot, filename = "image/eye_plot.png", height = 3, width = 5, dpi = 450)
 
 #include the age plot in rmd
-knitr::include_graphics("image/eye_plot.png")
-
+#knitr::include_graphics("image/eye_plot.png")
+knitr::include_graphics("static_image/eye_plot.png")
 ```
 
+#### Plot3: Ternary plot for 3 major attributes comparison
 
-
-### comparison of three major attributes of soccer player
-```{r}
+```{r out.height= "100%", out.width="100%"}
 #standarize the clean_player_data for all numeric columns based on min and max value
 player_standarized <- clean_player_data %>% 
   mutate(across(where(is.numeric), ~scales::rescale(.x, to = c(0, 1))))
@@ -230,13 +218,16 @@ player_standarized <- clean_player_data %>%
 # Plot the ternary plot for three attributes: strength, aggression, and balance
 #Plot the ternary plot for three attributes: strength, aggression, and balance
 
-tern_plot <- ggtern::ggtern(player_standarized, aes(x = finishing, y = dribbling, z = strength, 
+tern_plot <- ggtern::ggtern(player_standarized, aes(x = finishing, 
+                                                    y = dribbling, 
+                                                    z = strength, 
                                                     color = player_class)) +
   geom_point(alpha = 0.3)+
   theme_bw()+
   scale_color_manual(values = colors)+
   # Highlight all points with advanced players
-  geom_point(data = player_standarized %>% filter(player_class == "Advanced"), 
+  geom_point(data = player_standarized %>% 
+      filter(player_class == "Advanced"), 
               aes(x = finishing, y = dribbling, z = agility))+
   # Add labels for popular players of presnt data
   geom_text(data = player_standarized %>% 
@@ -253,51 +244,38 @@ tern_plot <- ggtern::ggtern(player_standarized, aes(x = finishing, y = dribbling
   #remove the legend produced from scale fill manual
   guides(fill = "none")+
   #increase axis text size
-  theme(axis.text = element_text(size = 40))+
+  theme(axis.text = element_text(size = 36))+
   theme(axis.title = element_text(size = 52))+
+  theme(axis.title = element_text(family = "serif"))+
   #remove the legend
   theme(legend.position = "none")+
-  geom_confidence_tern(breaks = 0.95)
-  # ggtern::Tlab("", labelarrow = 'Dribbling')+
-  # ggtern::Llab('', labelarrow = 'Finishing')+
-  # ggtern::Rlab('', labelarrow = 'Strength')
+  geom_confidence_tern(breaks = 0.95)+
+  theme(tern.axis.title.L = element_text(hjust = -.1, vjust = 2),
+        tern.axis.title.R = element_text(hjust = 1, vjust = 2))
 
 
 #save this as jpg using ggsave with name tern_plot
-ggsave(plot = tern_plot, filename = "image/tern_plot.png", height = 4, width = 4, scale = 1.4, dpi = 385)
+ggsave(plot = tern_plot, filename = "image/tern_plot.png", height = 6 , width = 6, dpi = 300)
 
 #Include the ternary plot in the rmd
-knitr::include_graphics("image/tern_plot.png")
+#knitr::include_graphics("image/tern_plot.png")
+knitr::include_graphics("static_image/tern_plot.png")
 
 ```
 
 
-Answer the following questions:
-
-What challenges did you encounter or anticipate encountering as you continue to build / iterate on your visualizations in R?
--I tried to inset the ternary plot into the main template, it keeps saying no third coordinates. I tried several approach but did not work. It seems like the tern plot does not fit into other base mainplot, considering  it requires three coordinates for its mapping. Also, for both radar and ternary plots, text annotation does not seem to work. all annotation no matter what position specified always overlay the main graph. I tried changing its position to free space and but that features does not seem to work here. The another challenge is in understanding the other's infographics template. I looked at the UFO template, and rerun all of them. When I tried copying same style, some function like min_max did not work. Also their output of each line looks so big in plot window, and in their final plot, everything looks perfect. This is extremely challenging in the beginning to understand how that is being resized.
-
-
-What feedback do you need from the instructional team and / or your peers to ensure that your intended message is clear?
--  I mostly need feedback on how simple my graph is. Most times when I start working on a project, I keep adding all details and information that keeps coming in my head, and later i realiz its clustered. Last time I also did a mistake on not able to select the correct visualizations types for my research question. so, I also need feedback on if the type of plot i am presenting is one of the good ways to present the data. 
-
-
-#wort extension tools / packages do you need to use to build your visualizations? Are there any that we haven’t covered in class that you’ll be learning how to use for your visualizations?
-I need to use ggradar, magick, ggtern, glue, ggplot, etc  in my visualizations. I think we have covered everything about it, at least we have already discussed the use case though we have not use the package directly. My learning goal here is to building inforgraphics template more than preparing different plot.
-
-
-##infographics from previous plots
-#------continuation to HW4 and a part from Hw3 
+#### Infographics:aesthetics buildup
+This segment and beyond involves, creating text, plots, base plots, etc aesthetics for the final infographics. Most of these are derived from UFO plot, as mentioned in the introduction of this document.
 
 ```{r}
 #specify text size and fonts
 alien <- c('#47fcea', '#3c6478', '#548687', '#17bd52', '#679d76', '#3e6f50', '#27593d')
-txt <- alien[2]
+txt <- alien[7]
 bg <- 'black' # '#010101'
 accent <- txt
 
-sysfonts::font_add("fa-brands", regular = "ufo/fa-brands-400.ttf")
-font_add("fa-solid",  regular = "ufo/fa-solid-900.ttf")
+sysfonts::font_add("fa-brands", regular = "data/font/fa-brands-400.ttf")
+font_add("fa-solid",  regular = "data/font/fa-solid-900.ttf")
 font_add_google("Orbitron", "orb")
 font_add_google("Barlow", "bar")
 showtext_auto()
@@ -316,9 +294,7 @@ caption <- glue("{mastodon}{space2}@sujan@{space}sujandon.org{space2}{twitter}{s
 
 ```
 
-
 ```{r}
-
 # Define subtitle with HTML formatting for colors
 subtitle <- "<span style='color:#7f58AF'>Advanced players[>85 ratings]</span>, <span style='color:#64C5EB'>Intermediate players[70-85]</span>, <span style='color:#E84D8A'>Novice players[<70]</span>"
 
@@ -379,14 +355,9 @@ annotate("text", x= 0, y = 1, label = "Lionel Messi, the world's best player,\n 
   theme_void() +
   coord_cartesian(clip = "off")
 ```
+Images cannot be loaded into ggplot object directly. it should be convereted to raster object and then it can be overlaid over other ggplot object. The following codes achieves the same thing for different images that are used in the final infographics.
 
-Convert the tern plot to raster object to load into the base plot.
 ```{r}
-# load the image and rasterize it
-# load the image and rasterize it
-library(png)
-library(jpeg)
-library(png)
 
 #load the tern image
 image <- readPNG("image/tern_plot.png")
@@ -414,8 +385,7 @@ soccer_field <- as.raster(soccer_field)
 
 ```
 
-
-
+The final graph is produced from the following line. This chunk adds all previously made plots and inset them into appropriate locations, based on preference. This process takes really long time, as finding the exact location from just point values is significantly tedious task. I would suggest using any other graphical interface software to add the quotes and paragraphs, which takes way less time.
 
 ```{r}
 # Combine the plots into a single infographic
@@ -439,6 +409,12 @@ g_final <- g_base +
 
 ggsave(plot = g_final, filename = "infographics_draft.png", height = 16, width = 10)
 ```
+
+```{r}
+#load the final infographics
+knitr::include_graphics("static_image/infographics.png")
+```
+
 
 
 
