@@ -6,7 +6,7 @@ output: html_document
 
 # European Soccer Players Attributes Comparison
 
-![Infographics](infographics_draft.png)
+![Infographics](static_image/infographics.png)
 
 ## Introduction
 
