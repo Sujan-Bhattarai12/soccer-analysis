@@ -32,7 +32,7 @@ Lionel Messi, often considered the world's best player, does not stand out signi
 
 ## How to Use
 
-To view the complete infographic with detailed insights and visualizations, download or clone this repository and open the `infographics_draft.png` file. For a more interactive experience and access to the code behind the visualizations, explore the RMarkdown file `soccer_players_attributes.Rmd`.
+To view the complete infographic with detailed insights and visualizations, download or clone this repository and open the `infographics_draft.png` file. For a more interactive experience and access to the code behind the visualizations, explore the RMarkdown file `index.qmd`.
 
 ## Credits
 
