@@ -6,7 +6,6 @@ format:
   html:
     toc: true
     html-math-method: katex
-    css: /health_posts/style.css
 author:
   - name: Sujan Bhattarai
 categories: [Data Viz] # self-defined categories
@@ -23,11 +22,19 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 #### Introduction about the project
 
-This project aims to create infographics comparing attributes of soccer players, sourced from a European soccer database available on Kaggle. The database contains data on over 10,000 players. Using R exclusively, the visualization focuses on attributes such as shooting, finishing, strength, age, etc. All tasks, from fetching the data to adding text and aligning elements, are performed using R packages. Special credit is given to the UFO alien template, accessible at [UFO link](https://github.com/doehm/tidytues/blob/main/scripts/2023/week-25-ufo/ufo.png)
+This project aims to create infographics comparing attributes of soccer
+players, sourced from a European soccer database available on Kaggle.
+The database contains data on over 10,000 players. Using R exclusively,
+the visualization focuses on attributes such as shooting, finishing,
+strength, age, etc. All tasks, from fetching the data to adding text and
+aligning elements, are performed using R packages. Special credit is
+given to the UFO alien template, accessible at [UFO
+link](https://github.com/doehm/tidytues/blob/main/scripts/2023/week-25-ufo/ufo.png)
 
-<p>Important Note:</p>
-
-<p>The ggplot package version used in this project is 3.4.4, and ggtern version 3.0.0 is utilized. It's crucial to consider that modern versions of ggplot might conflict when used in combination with other packages employed here.</p>
+**The ggplot package version used in this project is 3.4.4, and ggtern
+version is 3.0.0. It's crucial to consider that modern versions of
+ggplot conflicts when used in combination with other packages
+(especially ggtern) employed here.**
 
 ```{r, warning=FALSE, message=FALSE}
 #| echo: FALSE
@@ -57,7 +64,10 @@ library(png)
 
 #### Data Wrangling
 
-The datasets available on Kaggle are stored in SQLite and require joins to build a complete dataset. However, for this project, data from a single table is sufficient. Nevertheless, for future use, datasets will be combined if necessary.
+The datasets available on Kaggle are stored in SQLite and require joins
+to build a complete dataset. However, for this project, data from a
+single table is sufficient. Nevertheless, for future use, datasets will
+be combined if necessary.
 
 ```{r, warning=FALSE, message=FALSE}
 # create a connection to the database
@@ -81,7 +91,12 @@ player_attr <- player_attr %>% distinct(player_api_id, .keep_all = TRUE)
 
 ```
 
-The dataset includes a column named "overall ratings," representing the FIFA average rating from 2008 to 2016. This column will be utilized to categorize players into Advanced, Intermediate, and Novice. It's important to note that the term "Novice" is used for classification purposes and does not undermine any players; it's simply a classification based on personal preference.
+The dataset includes a column named "overall ratings," representing the
+FIFA average rating from 2008 to 2016. This column will be utilized to
+categorize players into Advanced, Intermediate, and Novice. It's
+important to note that the term "Novice" is used for classification
+purposes and does not undermine any players; it's simply a
+classification based on personal preference.
 
 ```{r}
 #---classify the players based on their overall rating
@@ -91,7 +106,10 @@ player_attr <- player_attr %>%
 
 ```
 
-The project will compare the following attributes of players. The hypothesis is whether there exists a difference in attributes between the world's renowned top performers and players who do not enjoy the same level of popularity.
+The project will compare the following attributes of players. The
+hypothesis is whether there exists a difference in attributes between
+the world's renowned top performers and players who do not enjoy the
+same level of popularity.
 
 ```{r}
 # filter required columns from the dataset
@@ -101,7 +119,11 @@ player_data <- player_attr %>%
 
 ```
 
-From the database containing over 10,000 players, only a subset is required. A random sample of 1000 players will be drawn from the intermediate and novice categories, while all players from the advanced category will be included, given that there are already fewer than 1000 advanced category players.
+From the database containing over 10,000 players, only a subset is
+required. A random sample of 1000 players will be drawn from the
+intermediate and novice categories, while all players from the advanced
+category will be included, given that there are already fewer than 1000
+advanced category players.
 
 ```{r}
 #---filter only good players from the player_data datase
@@ -274,9 +296,11 @@ knitr::include_graphics("static_image/tern_plot.png")
 
 ```
 
-
 #### Infographics:aesthetics buildup
-This segment and beyond involves, creating text, plots, base plots, etc aesthetics for the final infographics. Most of these are derived from UFO plot, as mentioned in the introduction of this document.
+
+This segment and beyond involves, creating text, plots, base plots, etc
+aesthetics for the final infographics. Most of these are derived from
+UFO plot, as mentioned in the introduction of this document.
 
 ```{r}
 #specify text size and fonts
@@ -301,7 +325,7 @@ github <- glue("<span style='font-family:fa-brands; color:{accent}'>&#xf09b;</sp
 floppy <- glue("<span style='font-family:fa-solid; color:{accent}'>&#xf0c7;</span>")
 space <- glue("<span style='color:{bg};font-size:1px'>'</span>")
 space2 <- glue("<span style='color:{bg}'>--</span>")
-caption <- glue("{mastodon}{space2}@sujan@{space}sujandon.org{space2}{twitter}{space2}@sujan{space2}{github}{space2}sbgithubhm/tidytues{space2}{floppy}{space2}European players attributes comparison")
+caption <- glue("{mastodon}{space2}@sujan@{space}sujandon.org{space2}{twitter}{space2}@sujan{space2}{github}{space2}sbgithubhm/tidytues{space2}{floppy}{space2}European players attributes")
 
 ```
 
@@ -312,7 +336,7 @@ subtitle <- "<span style='color:#7f58AF'>Advanced players[>85 ratings]</span>, <
 #---------------copy of UFO plot
 g_base <- ggplot() +
   labs(
-    title = "European Soccer Players \n attributes comparison based \n on Fifa ratings, 2016",
+    title = "Soccer database Players \n attributes comparison based \n on Fifa ratings, 2016",
     subtitle = subtitle,
     caption = caption
     ) +
@@ -366,7 +390,11 @@ annotate("text", x= 0, y = 1, label = "Lionel Messi, the world's best player,\n 
   theme_void() +
   coord_cartesian(clip = "off")
 ```
-Images cannot be loaded into ggplot object directly. it should be convereted to raster object and then it can be overlaid over other ggplot object. The following codes achieves the same thing for different images that are used in the final infographics.
+
+Images cannot be loaded into ggplot object directly. it should be
+convereted to raster object and then it can be overlaid over other
+ggplot object. The following codes achieves the same thing for different
+images that are used in the final infographics.
 
 ```{r}
 
@@ -396,7 +424,12 @@ soccer_field <- as.raster(soccer_field)
 
 ```
 
-The final graph is produced from the following line. This chunk adds all previously made plots and inset them into appropriate locations, based on preference. This process takes really long time, as finding the exact location from just point values is significantly tedious task. I would suggest using any other graphical interface software to add the quotes and paragraphs, which takes way less time.
+The final graph is produced from the following line. This chunk adds all
+previously made plots and inset them into appropriate locations, based
+on preference. This process takes really long time, as finding the exact
+location from just point values is significantly tedious task. I would
+suggest using any other graphical interface software to add the quotes
+and paragraphs, which takes way less time.
 
 ```{r}
 # Combine the plots into a single infographic
@@ -426,6 +459,59 @@ ggsave(plot = g_final, filename = "infographics_draft.png", height = 16, width =
 knitr::include_graphics("static_image/infographics.png")
 ```
 
+**For further information and the Initial motivation behind project,
+please follow below;**
 
+<blockquote>In all sports domain, some players always stands out in
+popularity. For example, Lebron James in Basketball, Khabib Nurmagomedov
+in UFC, Serena Williams in Tennis, and Lionel Messi and Cristiano
+Ronaldo in Soccer. But why do some players always stand out ? Does it
+relates to their ability to perform better than other players ? This is
+the central question of this project, which will explore how attributes
+between advanced and novice category differs.
 
+The project utilizes the soccer dataset from European soccer database,
+which has data about more than 10000 players and currently open source
+at Kaggle website. The dataset contains all information about every
+games played, home goals wins for teams, aways goals wins or losses,
+individual players attributes like shooting, strength, skill, balance,
+kicking, crossing, volleying and all other attributes that are described
+in soccer playing. This project only utilizes the player attributes data
+and not the team data, and explores the players attributes. The players
+will first be categorized into advanced, intermediate, and novice based
+on fifa ranking. Fifa ranking is available for each of those players,
+which is a average ratings of the overall performance of the player
+since 2008 season to 2016. All players with average ratings higher than
+85 are classified as advanced player, 70-85 as intermediate, and \<70 as
+novice players.
 
+For the infographics design, all information and codes help is archived
+from UFO infographics template. All designed are done only inside R and
+no other graphical editing softwares will be used. Three of the
+graphics: eyeplot, radar plot, and tern plot is used for attributes
+comparison. The base template will be created with ggplot which will
+have all other plots overlaid over it. The title and subtitle will be
+highlighted at the top. The subtitle will explains players and their
+category. For example: all advanced players in the infographics is
+represented as purple color, and that thing is shown from how subtitle
+is highlighted. The colors are chosen neutral in appearance with
+excellent contrast for quick differentiation. These colors are supposed
+to be colorblind friendly. The text sizes, themes, background, and
+spacing are all first defined based on the base template of the
+infographics. To avoid information overloading, none of the legend and
+axis are kept, since quick explanation at the paragraph should be
+sufficient. Some top performers like Lionel messi, Cristiano Ronaldo,
+and Virgil van Djik, who are some of the most popular players, are
+highlighted and annotated to contextualize the data. This should help
+where the worlds famous players stand. All my plots also centers the
+message about attributes comparison among different category soccer
+players. For example, the ternary plot will have the circled grouped
+data based on 95% confidence interval for all categories. This should
+help where categories overlap. This approach was able to show the high
+overlapped categories.
+
+The DEI approach is not satisfied for this plot, because in order to
+understand what player attributes are, an audience should be knowledged
+about the soccer games. So, this infographics is designed only for
+soccer fans, and none else. This data-viz project concludes that the
+difference between advanced and novice category is subtle.</blockquote>
