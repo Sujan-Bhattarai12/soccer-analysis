@@ -1,11 +1,4 @@
----
-title: "European Soccer Players Attributes Comparison"
-author: "Sujan Bhattarai"
-output: html_document
----
-
-# European Soccer Players Attributes Comparison
-
+# European Soccer Players Attributes Comparison"
 ![Infographics](static_image/infographics.png)
 
 ## Introduction
