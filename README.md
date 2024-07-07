@@ -1,5 +1,5 @@
 # European Soccer Players Attributes Comparison
-![Infographics](static_image/infographics.png)
+![Infographics](static_image/infographics.png){ width=50% }
 
 ## Introduction
 
