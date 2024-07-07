@@ -1,4 +1,4 @@
-# European Soccer Players Attributes Comparison"
+# European Soccer Players Attributes Comparison
 ![Infographics](static_image/infographics.png)
 
 ## Introduction
