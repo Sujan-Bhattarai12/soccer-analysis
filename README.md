@@ -1,6 +1,5 @@
 # European Soccer Players Attributes Comparison
-![Infographics](static_image/infographics.png){ width=50% }
-
+![Infographics](static_image/infographics.png)
 ## Introduction
 
 This project aims to visualize and compare attributes of soccer players sourced from a European soccer database available on Kaggle. The dataset contains data on over 10,000 players, and using R exclusively, the visualization focuses on attributes such as shooting, finishing, strength, age, etc. The infographic presents insights into the differences in player attributes between advanced, intermediate, and novice categories, as classified based on FIFA average ratings from 2008 to 2016.
