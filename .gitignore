@@ -1,5 +1,39 @@
-data
+# R specific
 .Rproj.user
-data.sqlite
-index_files/
 .Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+
+# Data files (large files)
+data/raw/*.sqlite
+data/raw/*.db
+data/processed/
+*.sqlite
+*.db
+
+# Images and fonts (can be large)
+data/images/
+data/fonts/
+
+# Generated outputs
+outputs/
+image/
+index_files/
+
+# R Markdown
+*.html
+*.pdf
+*_cache/
+*_files/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/

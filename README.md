@@ -21,9 +21,48 @@ The comparison of three critical attributes - finishing, strength, and dribbling
 
 Lionel Messi, often considered the world's best player, does not stand out significantly in the analysis. Other players demonstrate similar capabilities. This highlights that the outcome in sports games relies heavily on overall team performance, and individual attribute measures may not always be accurate metrics for game-winning.
 
+## Project Structure
+
+```
+soccer-analysis/
+├── data/                      # Data files (see data/README.md for setup)
+│   ├── raw/                  # Raw SQLite database
+│   ├── processed/            # Processed data
+│   ├── images/               # Source images for visualizations
+│   └── fonts/                # Font files
+├── src/                      # Source code
+│   └── analysis.R           # Main analysis script
+├── outputs/                  # Generated outputs
+│   └── plots/               # Individual plot outputs
+├── static_image/            # Final infographic images
+├── docs/                    # Documentation
+└── README.md
+```
+
+## Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Sujan-Bhattarai12/soccer-analysis.git
+   cd soccer-analysis
+   ```
+
+2. **Install required R packages**
+   - dplyr, RSQLite, ggplot2, ggradar, grid, magick, ggtern, tidyverse
+   - showtext, patchwork, janitor, glue, ggtext, geofacet
+   - cropcircles, ggpath, readr, scales, jpeg, png, ggdist
+
+3. **Download required data**
+   - See `data/README.md` for detailed instructions on obtaining the dataset
+
+4. **Run the analysis**
+   ```R
+   source("src/analysis.R")
+   ```
+
 ## How to Use
 
-To view the complete infographic with detailed insights and visualizations, download or clone this repository and open the `infographics_draft.png` file. For a more interactive experience and access to the code behind the visualizations, explore the RMarkdown file `index.qmd`.
+To view the complete infographic with detailed insights and visualizations, check the `infographics_draft.png` file in the root directory or `static_image/infographics.png`. For a more interactive experience and access to the code behind the visualizations, explore the analysis script in `src/analysis.R`.
 
 ## Credits
 
